@@ -1,0 +1,29 @@
+---
+title: "`r title`"
+date: "`r date `"
+output: 
+  html_document:
+    css: style.css
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+```
+
+```{r echo=F}
+  DT::datatable(final_table,
+    filter = "top",
+    editable = T,
+    escape = F,
+    options = list(
+      columnDefs = list(
+         list(width = "8em", targets = c(0)),
+          list(width = "20em", targets = c(2)),
+          list(width = "10em", targets = c(3)),
+        list(width = "40em", targets = c(5))
+      ),
+      pageLength = 10
+    ),
+    rownames = F
+  ) %>% 
+  DT::formatStyle(columns = seq_len(length(colnames(final_table))), fontSize = "95%")
+```

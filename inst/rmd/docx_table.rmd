@@ -1,0 +1,49 @@
+---
+  output:
+    word_document:
+      reference_docx: apa6_man.docx
+---
+
+```{r destroythistag, echo = FALSE, results = "asis"}
+if(class(table) != "list") {
+  table = list(table)
+}
+
+if (is.null(title)) {
+  title = rep("Untitled",length(table))
+}
+
+if (is.null(note)) {
+  note = rep(" ", length(table))
+}
+
+for (i in seq_along(table)) {
+  cat("\n\n")
+  cat("\n\n")
+  
+  if ("indent_" %in% names(table[[i]])) {
+    stub_indents = list(table[[i]]$indent_)
+    table[[i]]$indent_ = NULL
+  } else{
+    stub_indents = NULL
+  }
+  cat(paste0("Table ", i))
+  cat(
+    papaja::apa_table(
+      table[i],
+      caption = title[i],
+      stub_indents = stub_indents ,
+      note = note[i],
+      escape = F,
+      ...
+    )
+  )
+  
+  cat("<br />")
+  
+
+}
+```
+
+`
+
