@@ -8,6 +8,7 @@ Authors@R:
            email = "james.conigrave@gmail.com",
            comment = c(ORCID = "0000-0002-8816-6229"))
 Description: This package brings together miscellenious tools for writing papers in rmarkdown. Output data.frames or LaTeX tables to docx. Insert words instead of numbers. Format graphs. Create html notes from Zotero exports.
+URL: https://github.com/JConigrave/papyr
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -34,4 +35,5 @@ Imports:
     reshape2,
     tidyselect,
     gganimate
+Remotes: crsh/papaja
 RoxygenNote: 7.0.2
