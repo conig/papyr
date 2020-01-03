@@ -20,8 +20,8 @@ globalVariables(c("Author","Title","Extra","Notes","Type","Year"))
 clean_docx = function(docx_path, landscape = F){
 x = officer::read_docx(docx_path)
 x = x %>%
-  officer::body_replace_all_text("\\(#tab:destroythistag\\)","") %>%
-  officer::body_replace_all_text("\\`","")
+  officer::body_replace_all_text("\\(#tab:destroythistag\\)","", warn = F) %>%
+  officer::body_replace_all_text("\\`","", warn = F)
 
 if(landscape){
   x = officer::body_end_section_landscape(x)
@@ -30,12 +30,24 @@ if(landscape){
   utils::capture.output()
 }
 
+#' word_apa
+#'
+#' A wrapper for apa_table which will work nicely for word
+#' @param ... arguments passed  to papaja::apa_table
+#' @export word_apa
+
+word_apa = function(...){
+  x = utils::capture.output(papaja::apa_table(...,format = "word"))
+  paste(x, collapse = "\n")
+}
+
+
 #'to_docx
 #'
 #'Sends a data.frame to a word doc.
-#'@param table a dataframe or list of data.frames
+#'@param table a dataframe or list of data.frames. Alternatively, a list of LaTeX table code in character format If table == "clipboard" then copied latex code will be saved into the docx.
 #'@param path a string. Where you want to save the file.
-#'@param title string. If provided, allows tables to be named
+#'@param title string. If provided, allows tables will be named
 #'@param note a string. Allows for notes
 #'@param landscape a bool. If true, outputs a landscape word doc
 #'@param save_over a bool. If true, to_docx will save over files with same path
@@ -50,6 +62,10 @@ to_docx = function(table,
                    landscape = F,
                    save_over = T,
                    ...) {
+  if(all(table == "clipboard")){
+    table = paste0("\n",paste(clipr::read_clip(), collapse = "\n"))
+  }
+
   if (tools::file_ext(path) != "docx") {
     #if path isn't to .docx, it is now.
     path <- paste0(path, ".docx")
@@ -68,7 +84,7 @@ to_docx = function(table,
   }
 
   if (file.opened(file_path)) {
-    stop("Target file is currently open, cannot write.")
+    stop("Target file is currently open, cannot write.", .call = F)
   }
 
   if (!"list" %in% class(table)) {
@@ -83,7 +99,7 @@ to_docx = function(table,
     }
   }
 
-  rmarkdownpath = system.file("rmd", "docx_table.Rmd", package = "papertools")
+  rmarkdownpath = system.file("rmd", "docx_table.Rmd", package = "papyr")
 
   rmarkdown::render(
     rmarkdownpath,
@@ -124,7 +140,7 @@ zotero_notes = function(csv, path, title = "Zotero notes", date = format(Sys.tim
     stop("Target file is currently open, cannot write.")
   }
 
-  rmarkdownpath = system.file("rmd", "zotero_notes.Rmd", package = "papertools")
+  rmarkdownpath = system.file("rmd", "zotero_notes.Rmd", package = "papyr")
 x$Title = as.character(x$Title)
 x$Publication.Title = as.character(x$Publication.Title)
   final_table = x %>%
@@ -149,14 +165,14 @@ x$Publication.Title = as.character(x$Publication.Title)
 }
 
 replace_papaja_docx_template = function(){
-  papertools_apa6 = system.file("rmd", "apa6_man.docx", package = "papertools")
+  papyr_apa6 = system.file("rmd", "apa6_man.docx", package = "papyr")
   papaja_apa6 = system.file("rmarkdown/templates/apa6/resources", "apa6_man.docx", package = "papaja")
   if(papaja_apa6 == ""){
     stop("The files could not be located. Is papaja installed?")
   }
 
   unlink(papaja_apa6)
-  file.copy(papertools_apa6, papaja_apa6)
+  file.copy(papyr_apa6, papaja_apa6)
   return(message("file assasinated."))
 }
 
@@ -184,5 +200,11 @@ prevent_duplicates = function(path){
   }
   return(paste0(folder,"/",filename,".",ext)) #return the filename with the folder address pasted to it.
 }
+
+render_tex = function(path){
+
+
+}
+
 
 

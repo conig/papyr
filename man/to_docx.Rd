@@ -15,11 +15,11 @@ to_docx(
 )
 }
 \arguments{
-\item{table}{a dataframe or list of data.frames}
+\item{table}{a dataframe or list of data.frames. Alternatively, a list of LaTeX table code in character format If table == "clipboard" then copied latex code will be saved into the docx.}
 
 \item{path}{a string. Where you want to save the file.}
 
-\item{title}{string. If provided, allows tables to be named}
+\item{title}{string. If provided, allows tables will be named}
 
 \item{note}{a string. Allows for notes}
 
