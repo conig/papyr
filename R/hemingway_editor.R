@@ -5,6 +5,6 @@
 hemingway_editor = function(){
 
 #file = system.file("Hemingway Editor.html", package = "papyr")
-rstudioapi::viewer("http://www.hemingwayapp.com/")
+  utils::browseURL("http://www.hemingwayapp.com/")
 
 }
