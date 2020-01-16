@@ -34,6 +34,7 @@ Imports:
     RColorBrewer,
     reshape2,
     tidyselect,
-    gganimate
+    gganimate,
+    utils
 Remotes: crsh/papaja
 RoxygenNote: 7.0.2
