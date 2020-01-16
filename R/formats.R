@@ -37,6 +37,9 @@ glue_bracket = function(x, ..., round = 2, brackets = c("(",")"), collapse = ", 
     others = digits(others, round)
   }
 
+  together = as.character(c(x, others))
+  if(all(is.na(together))) return(NA) # if everything supplied is NA, just return NA.
+
   if(!is.null(dim(others))){
   bracks = apply(others,1, function(x) paste(x, collapse = collapse))
   }
