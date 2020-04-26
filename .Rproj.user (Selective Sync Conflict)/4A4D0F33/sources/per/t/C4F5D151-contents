@@ -1,0 +1,39 @@
+library(tidyverse)
+library(metaSEM)
+library(msemtools)
+
+
+f = readRDS("C:/Users/james/Dropbox (Sydney Uni)/9_Functions/Packages/testing/f.rds")
+
+ binary.intercept = 0; continuous_intercept = NULL
+ ########
+
+ model0 = metaSEM::meta3(risk_long_yi, risk_long_vi, cluster = study_id, data = f)
+
+ moderators = msemtools:::moderation_instructions(
+   Gender,
+   Age,
+   `Socioeconomic status` = SES,
+   `Alcohol restriction` = character_matrix(alcohol_restriction, levels = c("none","permit","restricted to club","dry","unknown")),
+   Cohort,
+   Remoteness,
+   State = character_matrix(
+     State,
+     levels = c('ACT', 'NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA')
+   ),
+   `Publication year` = scale(Year, scale = F),
+   `Indigenous involvement`,
+   `Cultural adaptations`,
+   Private,
+   Administration,
+   Instrument,
+   `Study quality` = scale(`Study quality`, scale = F)
+ )
+
+mod_table = model0 %>%
+    msemtools::moderate(moderators = moderators)
+
+format_nicely(mod_table, transform = papyr::logit2prob)
+
+
+

@@ -206,5 +206,9 @@ render_tex = function(path){
 
 }
 
-
+view_docx = function(tbl){
+  tempfile = tempfile(fileext = ".docx")
+  to_docx(tbl, tempfile)
+  shell.exec(tempfile)
+}
 
