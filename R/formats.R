@@ -49,19 +49,6 @@ glue_bracket = function(x, ..., round = 2, brackets = c("(",")"), collapse = ", 
   return(out)
 }
 
-#' to_c
-#'
-#' takes in a vector, converts it to a concatenate command
-#' @param x a character vector
-#' @export to_c
-
-to_c = function(x){
-  x = paste0("'",x, "'")
-  x = paste0(x,collapse = ",")
-  x = paste0("c(",x,")")
-  message(x)
-}
-
 #' m_iqr
 #'
 #' takes in a numeric vector, calculates a median and iqr and returns as text.
@@ -108,8 +95,10 @@ m_iqr = function(x,round = 1,quantiles = F,na.rm =T, in.brack = F){
 #' @param n a numeric. The number of digits to round to.
 #' @param stars a numeric vector, add a star every time p is less than a respective star
 #' @param leading.zero a bool. If FALSE, leading zeros will be removed
+#' @param apa_threshold output will indicate p value is less than this value regardless of rounding
+#' @param simplify if greater or equal to this numeric, two decimal places will be used
 #' @export round_p
-round_p =  function(p, n = 3, stars = c(), leading.zero = T){
+round_p =  function(p, n = 3, stars = c(), leading.zero = T, apa_threshold = 0.001, simplify = .1){
   rounded = digits(p,n)
   lapply(seq_along(rounded), function(x){
 
@@ -149,6 +138,14 @@ round_p =  function(p, n = 3, stars = c(), leading.zero = T){
       r = paste0("< ",r)
     }
 
+    if(original < apa_threshold){
+      r = paste0("< ", apa_threshold)
+    }
+
+    if(original >= simplify){
+      r = digits(original, 2)
+    }
+
     r = paste0(r,stars_to_add)
 
     return(r)
@@ -159,3 +156,4 @@ round_p =  function(p, n = 3, stars = c(), leading.zero = T){
   }) %>% unlist
 
 }
+

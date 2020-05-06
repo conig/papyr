@@ -1,0 +1,61 @@
+---
+output:
+  pdf_document
+header-includes:
+   - \usepackage{threeparttable}
+   - \usepackage{booktabs}
+   - \usepackage{longtable}
+   
+   
+---
+
+```{r destroythistag, echo = FALSE, results = "asis"}
+
+if(class(table) != "list") {
+  table = list(table)
+}
+
+if (is.null(title)) {
+  title = rep("Untitled",length(table))
+}
+
+if (is.null(note)) {
+  note = rep(" ", length(table))
+}
+
+
+for (i in seq_along(table)) {
+  cat("\n\n")
+  cat("\n\n")
+    
+  if (! "character" %in% class(table[[i]])) {
+    if ("indent_" %in% names(table[[i]])) {
+      stub_indents = list(table[[i]]$indent_)
+      table[[i]]$indent_ = NULL
+    } else{
+      stub_indents = NULL
+    }
+    cat(
+      papaja::apa_table(
+        table[i],
+        caption = title[i],
+        stub_indents = stub_indents ,
+        note = note[i],
+        escape = F,
+        ...
+      )
+    )
+    
+  
+  }else{
+    cat("\n\n")
+    cat(papaja:::escape_latex(table[[i]]))
+    cat("\n\n")
+  }
+  cat("<br />")
+
+}
+```
+
+`
+

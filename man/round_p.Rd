@@ -4,7 +4,14 @@
 \alias{round_p}
 \title{round p}
 \usage{
-round_p(p, n = 3, stars = c(), leading.zero = T)
+round_p(
+  p,
+  n = 3,
+  stars = c(),
+  leading.zero = T,
+  apa_threshold = 0.001,
+  simplify = 0.09
+)
 }
 \arguments{
 \item{p}{a p value, or vector of p-values}
@@ -14,6 +21,10 @@ round_p(p, n = 3, stars = c(), leading.zero = T)
 \item{stars}{a numeric vector, add a star every time p is less than a respective star}
 
 \item{leading.zero}{a bool. If FALSE, leading zeros will be removed}
+
+\item{apa_threshold}{output will indicate p value is less than this value regardless of rounding}
+
+\item{simplify}{if greater or equal to this numeric, two decimal places will be used}
 }
 \description{
 Rounds p value to specified digits and uses less symbol if result it zero.
