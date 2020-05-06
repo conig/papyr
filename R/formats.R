@@ -20,7 +20,6 @@ digits = function(x, n = 2) {
 #' @param round a scalar.
 #' @param brackets a vector with character strings to replace left and right brackets.
 #' @param collapse a string. separator for numbers within brackets
-#' @importFrom dplyr %>%
 #' @export glue_bracket
 
 glue_bracket = function(x, ..., round = 2, brackets = c("(",")"), collapse = ", ") {
@@ -57,8 +56,6 @@ glue_bracket = function(x, ..., round = 2, brackets = c("(",")"), collapse = ", 
 #' @param quantiles a bool.
 #' @param na.rm a bool.
 #' @param in.brack a bool.
-#' @importFrom stats quantile IQR
-#' @importFrom dplyr %>%
 #' @export m_iqr
 
 

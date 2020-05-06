@@ -13,9 +13,6 @@ globalVariables(c("Author","Title","Extra","Notes","Type","Year"))
 #'Removes random tags and a mark
 #'@param docx_path a character vector
 #'@param landscape a bool. If true, document will become landscape
-#'@importFrom dplyr %>%
-#'@importFrom officer read_docx body_replace_all_text
-#'@importFrom utils capture.output
 
 clean_docx = function(docx_path, landscape = F){
 x = officer::read_docx(docx_path)
@@ -118,9 +115,6 @@ to_docx = function(table,
 #'@param path a string. must end in .html
 #'@param title a string. Defaults to "Zotero notes"
 #'@param date a string. Defaults to current date
-#'@importFrom magrittr %>%
-#'@importFrom dplyr select mutate arrange desc
-#'@importFrom utils read.csv
 #'@export zotero_notes
 #csv = "C:/Users/jcon4884/Dropbox (Sydney Uni)/2_Grog Survey App - 1087192/10_reporting_publicity/papers/paper_5 - patterns of drinking meta analysis_James/7_paper/Literature review/Exported Items.csv"
 zotero_notes = function(csv, path, title = "Zotero notes", date = format(Sys.time(), '%d %B, %Y')){

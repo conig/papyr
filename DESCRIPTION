@@ -18,23 +18,26 @@ Imports:
     psych (>= 1.8.10),
     knitr (>= 1.21),
     rmarkdown (>= 1.11),
-    DT,
-    magrittr,
     ggplot2,
     officer,
     tibble,
     purrr,
-    sjstats,
     effects,
     stringr,
-    insight,
     glue,
-    performance,
     lexRankr,
     RColorBrewer,
     reshape2,
+    utils,
+    clipr,
+    magrittr
+Suggests:
+    sjstats,
+    DT,
+    performance,
+    insight,
     tidyselect,
-    gganimate,
-    utils
+    papaja,
+    gganimate
 Remotes: crsh/papaja
 RoxygenNote: 7.1.0

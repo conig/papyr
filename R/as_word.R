@@ -4,7 +4,6 @@
 #' @param x a numeric. Number to convert to english
 #' @param sentence a Bool. If true, the first letter is capitalised
 #' @param hyphenate a Bool. If true, compound numbers are hyphenated
-#' @importFrom dplyr %>%
 #' @export as_word
 
 as_word = function(x = NULL,
@@ -130,7 +129,6 @@ prob2odds <- function(p){
 #' @param x a dataframe
 #' @param round a numeric. Result will be rounded to this number.
 #' @export q_alpha
-#' @importFrom psych alpha
 
 q_alpha = function(x, round = 2){
   x = psych::alpha(x)$total$std.alpha
@@ -145,7 +143,6 @@ q_alpha = function(x, round = 2){
 #' @param x a vector of strings to match with patterns
 #' @param tolower a bool. Indicates whether or not to make each pattern and input vector lowercase
 #' @return A vector containing the number of times each pattern was matched
-#' @importFrom dplyr %>%
 #' @export multi_grepl_n
 
 
@@ -167,8 +164,6 @@ multi_grepl_n = function(pattern, x, tolower = T) {
 #' @param round scalar, the number of digits
 #' @param pattern a character string using glue syntax. Variable names are 'n' and 'p'.
 #' @param na.rm bool, whether to remove NAs
-#' @importFrom dplyr %>%
-#' @importFrom stats na.omit
 #' @return a character
 #' @export n_percent
 
