@@ -212,3 +212,71 @@ view_docx = function(tbl){
   shell.exec(tempfile)
 }
 
+
+#'to_pdf
+#'
+#'Sends a data.frame to a pdf doc.
+#'@param table a dataframe or list of data.frames. Alternatively, a list of LaTeX table code in character format If table == "clipboard" then copied latex code will be saved into the docx.
+#'@param path a string. Where you want to save the file.
+#'@param title string. If provided, allows tables will be named
+#'@param note a string. Allows for notes
+#'@param landscape a bool. If true, outputs a landscape word doc
+#'@param save_over a bool. If true, to_docx will save over files with same path
+#'@param ... additional arguements passed to apa_table
+#'@export to_pdf
+
+
+to_pdf = function(table,
+                   path,
+                   title = NULL,
+                   note = NULL,
+                   landscape = F,
+                   save_over = T,
+                   ...) {
+  if(all(table == "clipboard")){
+    table = paste0("\n",paste(clipr::read_clip(), collapse = "\n"))
+  }
+
+  if (tools::file_ext(path) != "pdf") {
+    #if path isn't to .docx, it is now.
+    path <- paste0(path, ".pdf")
+  }
+
+  if (!save_over) {
+    path = prevent_duplicates(path)
+  }
+
+  file_name = basename(path)
+
+  dir_name = dirname(path)
+  file_path = paste0(dir_name, "/", file_name)
+  if (dir_name == ".") {
+    dir_name = getwd()
+  }
+
+  if (file.opened(file_path)) {
+    stop("Target file is currently open, cannot write.", .call = F)
+  }
+
+  if (!"list" %in% class(table)) {
+    table = list(table)
+  }
+
+  if (!is.null(title)) {
+    if (length(title) != length(table)) {
+      stop(
+        "'title' is not the same length as 'table'. If titles are provided, they must be provided for each object."
+      )
+    }
+  }
+
+  rmarkdownpath = system.file("rmd", "pdf_table.Rmd", package = "papyr")
+
+  rmarkdown::render(
+    rmarkdownpath,
+    output_file = file_name,
+    output_dir = dir_name,
+    quiet = T
+  )
+  message(paste0("saved to: '", dir_name, "/", file_name, "'"))
+}
