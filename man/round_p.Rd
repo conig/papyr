@@ -10,7 +10,7 @@ round_p(
   stars = c(),
   leading.zero = T,
   apa_threshold = 0.001,
-  simplify = 0.09
+  simplify = 0.1
 )
 }
 \arguments{

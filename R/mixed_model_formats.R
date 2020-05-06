@@ -3,7 +3,6 @@
 #' Produces fixed effect tables for lme4 objects
 #'
 #' @param model a lme4 object
-#' @importFrom dplyr %>%
 #' @export mm_fe
 
 mm_fe = function(model){
@@ -31,7 +30,6 @@ mm_fe = function(model){
 #' @param model a lme4 object
 #' @param simple_names If true, latex commands are stipped
 #' @param sigma a Bool. If true, residual variance is included
-#' @importFrom dplyr %>%
 #' @export mm_re
 
 mm_re = function(model, simple_names = T, sigma = F){
@@ -112,9 +110,6 @@ mm_re = function(model, simple_names = T, sigma = F){
 #' @param simple_names a bool. If True, simple names are given
 #' @param collapse a string. Value to separate confidence intervals with
 #' @param brackets a vector. passed to glue, bracket.
-#' @importFrom dplyr %>% left_join bind_rows
-#' @importFrom tibble rownames_to_column
-#' @importFrom purrr modify_if
 #' @export mm_table
 
 #round = 2; round_p = 3; fixed_names = NULL; simple_names = F; collapse = " - "; brackets = c("(",")"); transf = NULL, transf_name = NULL
