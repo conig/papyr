@@ -162,7 +162,7 @@ multi_grepl_n = function(pattern, x, tolower = T) {
 #' Returns the number than meet a condition, and the percentage in brackets
 #' @param logical a logical vector to count
 #' @param round scalar, the number of digits
-#' @param pattern a character string using glue syntax. Variable names are 'n' and 'p'.
+#' @param pattern a character string using glue syntax. Variable names are 'n', 'p' and 'd' i.e. denominator.
 #' @param na.rm bool, whether to remove NAs
 #' @return a character
 #' @export n_percent
@@ -172,8 +172,8 @@ n_percent = function(logical, round = 2, na.rm = T, pattern = "{n} ({p}%)"){
     logical = stats::na.omit(logical)
   }
   n = sum(logical)
-  total_length = length(logical)
-  p = (n / total_length) %>%
+  d = length(logical)
+  p = (n / d) %>%
     "*"(100) %>%
     digits(round)
 
