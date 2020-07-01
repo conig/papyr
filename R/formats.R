@@ -154,3 +154,18 @@ round_p =  function(p, n = 3, stars = c(), leading.zero = T, apa_threshold = 0.0
 
 }
 
+#' print_t
+#'
+#' print the contents of a t.test in APA format
+#' @param x the t.test --- an object of class "htest"
+#' @export print_t
+
+print_t = function(x, round = 2, pattern = "$t$ = {t}, $df$ = {df}; $p$ = {p}"){
+
+  t = digits(x$statistic, round)
+  df = round(x$parameter, round)
+  p = round_p(x$p.value)
+
+glue::glue(pattern)
+
+}
