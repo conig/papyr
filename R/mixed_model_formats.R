@@ -6,8 +6,15 @@
 #' @export mm_fe
 
 mm_fe = function(model){
-  fixed_table = stats::coef(summary(model)) %>%
-    data.frame %>%
+  if(is(model, "glmerMod")){
+    summ = suppressMessages(stats::coef(summary(model)))
+    colnames(summ)[grepl("Pr",colnames(summ))] = "Pr(>|t|)" # to make uniform
+    summ = data.frame(summ)
+  }else{
+  summ = suppressMessages(stats::coef(lmerTest:::summary.lmerModLmerTest(model)))
+  }
+
+   fixed_table = summ %>%
     tibble::rownames_to_column() %>%
     dplyr::left_join(stats::confint(model, method = "Wald") %>%
                        data.frame() %>%
@@ -18,7 +25,7 @@ mm_fe = function(model){
     dplyr::rename(Predictors = rowname,
                   b = Estimate,
                   SE = Std..Error,
-                  p = Pr...z..,
+                  p = Pr...t..,
                   lower = X2.5..,
                   upper = X97.5..)
   return(fixed_table)
