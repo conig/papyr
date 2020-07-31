@@ -1,6 +1,6 @@
 #' mm_fe
 #'
-#' Produces fixed effect tables for lme4 objects
+#' Produces fixed effect tables for lme4 model
 #'
 #' @param model a lme4 object
 #' @export mm_fe
@@ -9,12 +9,12 @@ mm_fe = function(model){
   if(is(model, "glmerMod")){
     summ = suppressMessages(stats::coef(summary(model)))
     colnames(summ)[grepl("Pr",colnames(summ))] = "Pr(>|t|)" # to make uniform
-    summ = data.frame(summ)
   }else{
   summ = suppressMessages(stats::coef(lmerTest:::summary.lmerModLmerTest(model)))
   }
 
    fixed_table = summ %>%
+     data.frame() %>%
     tibble::rownames_to_column() %>%
     dplyr::left_join(stats::confint(model, method = "Wald") %>%
                        data.frame() %>%
