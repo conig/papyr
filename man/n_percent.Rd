@@ -13,7 +13,7 @@ n_percent(logical, round = 2, na.rm = T, pattern = "{n} ({p}\%)")
 
 \item{na.rm}{bool, whether to remove NAs}
 
-\item{pattern}{a character string using glue syntax. Variable names are 'n' and 'p'.}
+\item{pattern}{a character string using glue syntax. Variable names are 'n', 'p' and 'd' i.e. denominator.}
 }
 \value{
 a character
