@@ -4,12 +4,14 @@
 \alias{plot_reg}
 \title{plot_reg}
 \usage{
-plot_reg(lm, x = NULL)
+plot_reg(lm, x = NULL, ...)
 }
 \arguments{
 \item{lm}{a linear model}
 
 \item{x}{character, predictor}
+
+\item{...}{extra arguments passed to plot}
 }
 \description{
 function
