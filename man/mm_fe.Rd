@@ -10,5 +10,5 @@ mm_fe(model)
 \item{model}{a lme4 object}
 }
 \description{
-Produces fixed effect tables for lme4 objects
+Produces fixed effect tables for lme4 model
 }
