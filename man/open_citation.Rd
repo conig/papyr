@@ -4,12 +4,10 @@
 \alias{open_citation}
 \title{open_citation}
 \usage{
-open_citation(citation = NULL, package = NULL)
+open_citation(package = NULL)
 }
 \arguments{
-\item{citation}{citation object to open with zotero}
-
-\item{pacakge}{the package name}
+\item{package}{the package name}
 }
 \description{
 Write a bibtex citation to a temporary file and open it. This may assist with loading R references into Zotero
