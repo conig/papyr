@@ -38,6 +38,7 @@ Suggests:
     insight,
     tidyselect,
     papaja,
-    gganimate
+    gganimate,
+    seasl
 Remotes: crsh/papaja
 RoxygenNote: 7.1.1
