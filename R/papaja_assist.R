@@ -47,7 +47,3 @@ to_rowhead = function(data, x, italics = FALSE) {
   return(do.call(rbind, table_out))
 
 }
-
-
-
-
