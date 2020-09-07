@@ -5,13 +5,13 @@
 \title{discussion}
 \usage{
 discussion(
-  key_finding,
-  other_findings,
-  context,
-  limitations,
-  whats_next,
-  so_what,
-  conclusion
+  key_finding = "",
+  other_findings = "",
+  context = "",
+  limitations = "",
+  whats_next = "",
+  so_what = "",
+  conclusion = ""
 )
 }
 \arguments{

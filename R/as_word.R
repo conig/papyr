@@ -247,4 +247,23 @@ clippy = function(x, row.names = F){
   utils::write.table(x , "clipboard", sep = "\t", quote = FALSE, qmethod = "double", row.names = row.names)
 }
 
+#' apply_gsub
+#'
+#' Batch together gsub commands
+#' @param x vector of strings to modify
+#' @param ... list syntax, replacement = c("words", "to", "replace")
+#' @export
+
+apply_gsub = function(x, ...){
+  instructions <- list(...)
+
+  for(i in seq_along(instructions)){
+    x <- gsub(paste(instructions[[i]], collapse = "|"), names(instructions)[i], x)
+  }
+
+  x
+
+}
+
+
 globalVariables("%>%")
