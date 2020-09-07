@@ -1,3 +1,24 @@
+#' check_resids
+#'
+#' view residuals from an htest object
+#' @param csq htest object
+#' importFrom ggplot2 ggplot aes_string geom_tile scale_fill_gradient2 theme_bw labs
+#' @export
+
+check_resids <- function(csq) {
+  x  <- data.frame(csq$residuals)
+  names(x)[3] = "resid"
+
+  ggplot(x, aes_string(
+    x = names(x)[1],
+    y = names(x)[2],
+    fill = "resid"
+  )) +
+    geom_tile(colour = "black") +
+    scale_fill_gradient2(low = "blue", high = "red") +
+    theme_bw() + labs(fill = "residual")
+
+}
 
 #' pie_chart
 #'
