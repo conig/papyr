@@ -258,7 +258,9 @@ apply_gsub = function(x, ...){
   instructions <- list(...)
 
   for(i in seq_along(instructions)){
-    x <- gsub(paste(instructions[[i]], collapse = "|"), names(instructions)[i], x)
+    to_replace = names(instructions)[i]
+    if(to_replace == "NULL") to_replace <- ""
+    x <- gsub(paste(instructions[[i]], collapse = "|"), to_replace, x)
   }
 
   x
