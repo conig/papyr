@@ -256,10 +256,11 @@ clippy = function(x, row.names = F){
 
 apply_gsub = function(x, ...){
   instructions <- list(...)
-
   for(i in seq_along(instructions)){
     to_replace = names(instructions)[i]
-    if(to_replace == "NULL") to_replace <- ""
+    if(to_replace == "NULL"){
+        to_replace <- NA
+    }
     x <- gsub(paste(instructions[[i]], collapse = "|"), to_replace, x)
   }
 
