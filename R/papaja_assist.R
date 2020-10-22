@@ -47,3 +47,26 @@ to_rowhead = function(data, x, italics = FALSE) {
   return(do.call(rbind, table_out))
 
 }
+
+#' conv_md_latex
+#'
+#' Convert markdown to latex
+#' @param x data.frame
+
+conv_md_latex <- function(x){
+  markdown_to_latex <- function(x) {
+    while(grepl("\\*\\*.*\\*\\*", x)){ # while enclosed double asterisks remain
+      x <- sub("(\\*\\*)", "\\\\textbf{", x)
+      x <- sub("(\\*\\*)", "}", x)
+    }
+    while (grepl("\\*.*\\*", x)) { # while enclosed single asterisks remain
+      x <- sub("(\\*)", "\\\\emph{", x)
+      x <- sub("(\\*)", "}", x)
+    }
+    x
+  }
+
+  names(x) = sapply(names(x), markdown_to_latex)
+  x <- apply(x, c(1,2), markdown_to_latex)
+  x
+}
