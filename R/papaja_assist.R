@@ -63,11 +63,13 @@ conv_md_latex <- function(x){
       x <- sub("(\\*)", "\\\\emph{", x)
       x <- sub("(\\*)", "}", x)
     }
-    x = tibble::tibble(x)
     x
   }
+  if(is(x, "data.table")){
+    x <- tibble::tibble(x)
+  }
 
-  names(x) = sapply(names(x), markdown_to_latex)
-  x <- apply(x, c(1,2), markdown_to_latex)
+  names(x) = unlist(lapply(names(x), markdown_to_latex))
+  x[] <- apply(data.frame(x), c(1,2), markdown_to_latex)
   x
 }
