@@ -253,6 +253,7 @@ clippy = function(x, row.names = F){
 #' @param x vector of strings to modify
 #' @param ... list syntax, replacement = c("words", "to", "replace")
 #' @export
+#' @details using NULL as a replacement string will result in NAs
 
 apply_gsub = function(x, ...){
   instructions <- list(...)

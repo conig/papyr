@@ -149,7 +149,7 @@ mm_table = function(model,
  #define random effects ------------------------------------------------
 
   random_effects = mm_re(model, simple_names = simple_names) %>%
-    dplyr::select(Predictors = Effect, "$\\beta$" = est) %>%
+    dplyr::select(Predictors = Effect, "Estimate" = est) %>%
     purrr::modify_if(is.numeric,function(x) as.character(digits(x,round)))
 
   #round fixed table ------------------------
@@ -175,7 +175,7 @@ mm_table = function(model,
 
 
   final_fixed = rounded_fixed %>%
-    dplyr::select("Predictors", `$\\beta$` = b, `$SE$` = SE, `95% CI`, `$p$` = p)
+    dplyr::select("Predictors", `Estimate` = b, `$SE$` = SE, `95% CI`, `$p$` = p)
 
   if(!is.null(transf_name)){
     names(final_fixed)[names(final_fixed) == "95% CI"] = transf_name
@@ -188,14 +188,10 @@ mm_table = function(model,
 
   table_out[is.na(table_out)] = " "
 
-  if(simple_names){
-    table_out = table_out %>%
-      dplyr::rename(beta = "$\\beta$")
-  }
 
   return(table_out)
 }
 
 
-globalVariables(c(".","coef", "p","$\\beta$","SE","OR","rowname","95% CI","Estimate",
+globalVariables(c(".","coef", "p","SE","OR","rowname","95% CI","Estimate",
                   "Pr...t..","Pr...z..","Std..Error","X2.5..","X97.5..","b","lower","remain","upper", "Effect","est"))
