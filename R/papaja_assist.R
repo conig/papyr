@@ -63,6 +63,7 @@ conv_md_latex <- function(x){
       x <- sub("(\\*)", "\\\\emph{", x)
       x <- sub("(\\*)", "}", x)
     }
+    x = tibble::tibble(x)
     x
   }
 
