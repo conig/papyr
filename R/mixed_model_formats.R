@@ -165,7 +165,7 @@ mm_table = function(model,
   }else{
     rounded_fixed = rounded_fixed %>%
       dplyr::mutate(temp_estimate = digits(transf(b)),round) %>%
-      dplyr::mutate(`95% CI` = glue::glue(" {temp_estimate} [{lower}, {upper}]") %>% as.character())
+      dplyr::mutate(`95% CI` = glue::glue("{temp_estimate} [{lower}, {upper}]") %>% as.character())
   }
 
   rounded_fixed = rounded_fixed %>%
