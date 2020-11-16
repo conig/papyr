@@ -169,3 +169,5 @@ print_t = function(x, round = 2, pattern = "$t$ = {t}, $df$ = {df}; $p$ = {p}"){
 glue::glue(pattern)
 
 }
+
+

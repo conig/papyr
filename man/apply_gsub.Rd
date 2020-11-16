@@ -14,3 +14,6 @@ apply_gsub(x, ...)
 \description{
 Batch together gsub commands
 }
+\details{
+using NULL as a replacement string will result in NAs
+}
