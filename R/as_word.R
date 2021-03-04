@@ -167,7 +167,7 @@ multi_grepl_n = function(pattern, x, tolower = T) {
 #' @return a character
 #' @export n_percent
 
-n_percent = function(logical, round = 2, na.rm = T, pattern = "{n} ({p}%)"){
+n_percent = function(logical, round = 2, na.rm = T, pattern = "{format(n,big.mark = ',')} ({p}%)"){
   if(na.rm){
     logical = stats::na.omit(logical)
   }
@@ -176,7 +176,6 @@ n_percent = function(logical, round = 2, na.rm = T, pattern = "{n} ({p}%)"){
   p = (n / d) %>%
     "*"(100) %>%
     digits(round)
-
   out = glue::glue(pattern)
 
   return(out)
