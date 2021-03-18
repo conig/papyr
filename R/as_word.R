@@ -41,9 +41,10 @@ as_word = function(x = NULL,
 #' @export simpl_frac
 
 simpl_frac = function(p,
+                      pattern = "{frac} {pc}%",
                        sentence = F,
                        percent = T,
-                       round = 1,
+                       digits = 2,
                        denom = 1:20) {
 
   odds = prob2odds(p)
@@ -58,35 +59,32 @@ simpl_frac = function(p,
   res$remain = ifelse(res$num > 5, res$remain + .025, res$remain)
 
   res = dplyr::filter(dplyr::arrange(res, remain, denom), num != 0 & remain < 0.3)
-  perc = round(p*100, round)
+  pc = digits(p*100, digits)
 
   if(nrow(res) == 0){
-    simpl = hash_replace("few")
+    frac = hash_replace("few")
   }else{
 
     num = as_word(res$num[1])
     denom = as_word(res$denom[1])
 
-    simpl = hash_replace("##num## in ##denom##")
+    frac = hash_replace("##num## in ##denom##")
   }
 
   if(p > .9){
-    simpl = "most"
+    frac = "most"
   }
 
   if(p == 1){
-    simpl = "all"
+    frac = "all"
   }
 
   if(sentence){
-    substr(simpl, 1, 1) <- toupper(substr(simpl, 1, 1))
+    substr(frac, 1, 1) <- toupper(substr(simpl, 1, 1))
   }
 
-  if(percent){
-    simpl = hash_replace("##simpl## (##perc##%)")
-  }
 
-  return(simpl)
+glue::glue(pattern)
 
 }
 
