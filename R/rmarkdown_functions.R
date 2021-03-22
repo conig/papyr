@@ -108,6 +108,7 @@ to_docx = function(table,
   message(paste0("saved to: '", dir_name, "/", file_name, "'"))
 }
 
+
 #'zotero_notes
 #'
 #'Sends a data.frame to a word doc.
@@ -118,7 +119,12 @@ to_docx = function(table,
 #'@export zotero_notes
 #csv = "C:/Users/jcon4884/Dropbox (Sydney Uni)/2_Grog Survey App - 1087192/10_reporting_publicity/papers/paper_5 - patterns of drinking meta analysis_James/7_paper/Literature review/Exported Items.csv"
 zotero_notes = function(csv, path, title = "Zotero notes", date = format(Sys.time(), '%d %B, %Y')){
-  x = utils::read.csv(csv)
+  if(tools::file_ext(csv)){
+    x <- bib2df(csv)
+  }else{
+    x <- utils::read.csv(csv)
+  }
+
   x$Author = gsub(",.*",", et al.",x$Author)
   x$Notes = as.character(x$Notes)
   x$Notes[is.na(x$Notes)] = "   "
