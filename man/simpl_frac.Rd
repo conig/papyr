@@ -4,7 +4,14 @@
 \alias{simpl_frac}
 \title{simpl_frac}
 \usage{
-simpl_frac(p, sentence = F, percent = T, round = 1, denom = 1:20)
+simpl_frac(
+  p,
+  pattern = "{frac} {pc}\%",
+  sentence = F,
+  percent = T,
+  digits = 2,
+  denom = 1:20
+)
 }
 \arguments{
 \item{p}{a proportion}
@@ -13,9 +20,9 @@ simpl_frac(p, sentence = F, percent = T, round = 1, denom = 1:20)
 
 \item{percent}{If true, true percent is pasted to the final value}
 
-\item{round}{the number of digits to round summary percent to}
-
 \item{denom}{valid denominator values, a sequence}
+
+\item{round}{the number of digits to round summary percent to}
 }
 \description{
 Simplified fractions for presentation

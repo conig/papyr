@@ -4,7 +4,12 @@
 \alias{n_percent}
 \title{n_percent}
 \usage{
-n_percent(logical, round = 2, na.rm = T, pattern = "{n} ({p}\%)")
+n_percent(
+  logical,
+  round = 2,
+  na.rm = T,
+  pattern = "{format(n,big.mark = ',')} ({p}\%)"
+)
 }
 \arguments{
 \item{logical}{a logical vector to count}
