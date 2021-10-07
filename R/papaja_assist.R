@@ -7,9 +7,11 @@
 #' @export to_rowhead
 
 to_rowhead = function(data, x, italics = FALSE) {
+  data = data.frame(data, check.names = FALSE)
   x = tidyselect::vars_select(colnames(data), {{x}})
   row_head = as.character(unlist(data[, x]))
-  new_data = data[, !names(data) %in% x]
+  if(any(is.na(row_head))) stop("There cannot be missing data in the rowhead variable.")
+  new_data = data[, !names(data) %in% x, drop = FALSE]
   new_data$indent_ = T
 
   new_head = lapply(seq_along(row_head), function(i) {
@@ -27,7 +29,7 @@ to_rowhead = function(data, x, italics = FALSE) {
 
   table_out = lapply(seq_along(new_head), function(i) {
     if (new_head[i]) {
-      new_row = new_data[i,]
+      new_row = new_data[i, , drop = FALSE]
       new_row[, 1] = unlist(data[i, x])
 
       if(italics){
@@ -40,11 +42,13 @@ to_rowhead = function(data, x, italics = FALSE) {
       return(rbind(new_row, new_data[i,]))
 
     } else{
-      return(new_data[i,])
+      return(new_data[i, , drop = FALSE])
     }
   })
 
-  return(do.call(rbind, table_out))
+  out <- do.call(rbind, table_out)
+  rownames(out) <- NULL
+  out
 
 }
 

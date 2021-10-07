@@ -4,10 +4,12 @@
 \alias{mm_fe}
 \title{mm_fe}
 \usage{
-mm_fe(model)
+mm_fe(model, ...)
 }
 \arguments{
 \item{model}{a lme4 object}
+
+\item{...}{additional arguments passed to confint}
 }
 \description{
 Produces fixed effect tables for lme4 model
