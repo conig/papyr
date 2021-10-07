@@ -13,7 +13,8 @@ mm_table(
   fixed_names = NULL,
   simple_names = F,
   collapse = " - ",
-  brackets = c("(", ")")
+  brackets = c("(", ")"),
+  ...
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ mm_table(
 \item{collapse}{a string. Value to separate confidence intervals with}
 
 \item{brackets}{a vector. passed to glue, bracket.}
+
+\item{...}{additional arguments passed to mm_fe}
 }
 \description{
 Creates a table of fixed and random effects

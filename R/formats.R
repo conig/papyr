@@ -13,6 +13,15 @@ digits = function(x, n = 2) {
   return(x)
 }
 
+#' digit_transformer
+#'
+#' A digit transformer for glue::glue
+#' @export
+
+digit_transformer <- function(text, envir){
+ digits(eval(parse(text = text, keep.source = FALSE), envir),2)
+}
+
 #' glue_bracket
 #'
 #' @param x a character or numeric
@@ -170,4 +179,11 @@ glue::glue(pattern)
 
 }
 
+#' rINT
+#'
+#' Inverse-normal transformation
+#' @param x vector
+#' @details https://www.biostars.org/p/80597/
+#' @export
 
+rINT <- function(x) qnorm((rank(x,na.last="keep")-0.5)/sum(!is.na(x)))

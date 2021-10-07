@@ -7,7 +7,8 @@
 
 save_csl = function(style){
   requireNamespace("seasl", quietly = TRUE)
-  origin <- seasl::csl_styles(style)
+  origin <- seasl::csl_style_find(style)
+  if(is.null(origin)) stop("style not found")
   destination = glue::glue("reference_styles/{style}.csl")
   if(!dir.exists("reference_styles")){
     dir.create("reference_styles")

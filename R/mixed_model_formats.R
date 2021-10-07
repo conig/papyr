@@ -3,9 +3,10 @@
 #' Produces fixed effect tables for lme4 model
 #'
 #' @param model a lme4 object
+#' @param ... additional arguments passed to confint
 #' @export mm_fe
 
-mm_fe = function(model){
+mm_fe = function(model, ...){
   if(is(model, "glmerMod")){
     summ = suppressMessages(stats::coef(summary(model)))
     colnames(summ)[grepl("Pr",colnames(summ))] = "Pr(>|t|)" # to make uniform
@@ -16,7 +17,7 @@ mm_fe = function(model){
    fixed_table = summ %>%
      data.frame() %>%
     tibble::rownames_to_column() %>%
-    dplyr::left_join(stats::confint(model, method = "Wald") %>%
+    dplyr::left_join(stats::confint(model, ...) %>%
                        data.frame() %>%
                        tibble::rownames_to_column(),
                      by = "rowname")
@@ -46,24 +47,36 @@ mm_re = function(model, simple_names = T, sigma = F){
     data.frame() %>%
     tibble::rownames_to_column() %>%
     dplyr::mutate(type = "tau.00")
+  tau_const$. <- digits(tau_const$. , 2)
+
 
   tau_slope = var_summary$var.slope %>%
     data.frame() %>%
     tibble::rownames_to_column() %>%
     dplyr::mutate(type = "tau.11")
+  if(nrow(tau_slope) > 0){
+  tau_slope$. <- digits(tau_slope$.)
+  }
 
-  cor.slope_int = var_summary$cor.slope_intercept %>%
-    data.frame() %>%
-    tibble::rownames_to_column() %>%
-    dplyr::mutate(type = "p.01")
+  if(is.null(var_summary$cor.slope_intercept)){
+    cor.slope_int <- data.frame(matrix(ncol = 3, nrow = 0))
+  }else{
+    cor.slope_int = var_summary$cor.slope_intercept %>%
+      data.frame() %>%
+      tibble::rownames_to_column() %>%
+      dplyr::mutate(type = "p.01")
+  }
+
+  names(cor.slope_int) <- c("rowname",".","type")
 
   re_vars = tibble::tibble(rowname = "_sigma", . = var_summary$var.residual, type = "sigma2" )
 
   #ICC ----
-  iccs = performance::icc(model)$ICC_adjusted
+  iccs = paste0(digits(performance::icc(model)$ICC_adjusted*100,2),"%")
   iccs = tibble::tibble(rowname = "ICC","." = iccs, type = "ICC")
 
-  re_vars = dplyr::bind_rows(re_vars, tau_const, tau_slope, cor.slope_int, iccs)
+  re_vars <- list(re_vars, tau_const, tau_slope, cor.slope_int, iccs)
+  re_vars <- do.call(rbind, re_vars[sapply(re_vars, nrow) > 0])
 
   if(!simple_names){
     sigma_name = "$\\sigma^2$"
@@ -100,7 +113,7 @@ mm_re = function(model, simple_names = T, sigma = F){
   #   dplyr::select(Predictors = rowname, "$\\beta$" = ".") %>%
   #   purrr::modify_if(is.numeric,function(x) as.character(digits(x,round)))
   #
-  return(random_effects)
+  random_effects
 }
 
 
@@ -117,6 +130,7 @@ mm_re = function(model, simple_names = T, sigma = F){
 #' @param simple_names a bool. If True, simple names are given
 #' @param collapse a string. Value to separate confidence intervals with
 #' @param brackets a vector. passed to glue, bracket.
+#' @param ... additional arguments passed to mm_fe
 #' @export mm_table
 
 #round = 2; round_p = 3; fixed_names = NULL; simple_names = F; collapse = " - "; brackets = c("(",")"); transf = NULL, transf_name = NULL
@@ -130,11 +144,12 @@ mm_table = function(model,
                     #random_names = NULL,
                     simple_names = F,
                     collapse = " - ",
-                    brackets = c("(", ")")) {
+                    brackets = c("(", ")"),
+                    ...) {
 
 
   # define fixed effects -------------------------------------------
-  fixed_table = mm_fe(model)
+  fixed_table = mm_fe(model, ...)
 
   if(!is.null(transf)){ # if transformation requested, transform confidence interval
     fixed_table$lower = transf(fixed_table$lower)
