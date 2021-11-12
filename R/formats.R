@@ -1,3 +1,24 @@
+#' mode
+#'
+#' Returns most frequent value
+#' @param x a vector
+#' @param na.rm bool. Should missing values be removed?
+#' @export
+
+mode <- function(x, na.rm = TRUE){
+  if(!na.rm & any(is.na(x))){
+    return(NA)
+  }
+
+  if(any(is.na(x))){
+    x <- na.omit(x)
+  }
+
+  u_x <- unique(x)
+  u_x[which.max(tabulate(match(x, u_x)))]
+
+}
+
 #' digits
 #'
 #' Allows the user to specify the exact number of digits
