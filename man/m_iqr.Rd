@@ -4,18 +4,16 @@
 \alias{m_iqr}
 \title{m_iqr}
 \usage{
-m_iqr(x, round = 1, quantiles = F, na.rm = T, in.brack = F)
+m_iqr(x, round = 2, na.rm = T, pattern = "{median} (IQR = {IQR})")
 }
 \arguments{
 \item{x}{a character vector}
 
 \item{round}{a numeric.}
 
-\item{quantiles}{a bool.}
-
 \item{na.rm}{a bool.}
 
-\item{in.brack}{a bool.}
+\item{pattern}{a string to supply to glue. Can use the values median, IQR, Q.25, or Q.75 (the latter being the 25th and 75th quantiles)}
 }
 \description{
 takes in a numeric vector, calculates a median and iqr and returns as text.

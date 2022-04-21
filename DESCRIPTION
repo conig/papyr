@@ -1,6 +1,6 @@
 Package: papyr
 Title: Tools for writing academic papers with rmarkdown
-Version: 0.0.1.8
+Version: 0.0.1.9
 Authors@R: 
     person(given = "James",
            family = "Conigrave",
@@ -42,6 +42,7 @@ Suggests:
     gganimate,
     seasl,
     LSAfun,
-    lexRankr
+    lexRankr,
+    trackdown
 Remotes: crsh/papaja
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2

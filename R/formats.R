@@ -1,11 +1,11 @@
-#' mode
+#' most_freq
 #'
 #' Returns most frequent value
 #' @param x a vector
 #' @param na.rm bool. Should missing values be removed?
 #' @export
 
-mode <- function(x, na.rm = TRUE){
+most_freq <- function(x, na.rm = TRUE){
   if(!na.rm & any(is.na(x))){
     return(NA)
   }
@@ -83,36 +83,25 @@ glue_bracket = function(x, ..., round = 2, brackets = c("(",")"), collapse = ", 
 #' takes in a numeric vector, calculates a median and iqr and returns as text.
 #' @param x a character vector
 #' @param round a numeric.
-#' @param quantiles a bool.
 #' @param na.rm a bool.
-#' @param in.brack a bool.
+#' @param pattern a string to supply to glue. Can use the values median, IQR, Q.25, or Q.75 (the latter being the 25th and 75th quantiles)
 #' @export m_iqr
 
 
-m_iqr = function(x,round = 1,quantiles = F,na.rm =T, in.brack = F){
+m_iqr <- function(x, round = 2, na.rm =T, pattern = "{median} (IQR = {IQR})"){
+
   median = digits(median(x,na.rm=na.rm), round)
 
-  if(quantiles == F){
-  IQR = IQR(x,na.rm=na.rm) %>% digits(round)
-    if(!in.brack){
-  text = paste0(median," (IQR = ",IQR,")")
-    }else{
-     text = paste0("(median = ",median,", IQR = ",IQR,")")
-    }
+  IQR = IQR(x,na.rm=na.rm) |>  digits(round)
 
-  }else{
-    quant = stats::quantile(x, na.rm = na.rm)
-    q.25 = quant[2] %>% digits(round)
-    q.75 = quant[4] %>% digits(round)
+    quant <- stats::quantile(x, na.rm = na.rm)
+    Q.25 <- stats::quantile(x, na.rm = na.rm, probs = .25) |>
+      digits(round)
+    Q.75 <- stats::quantile(x, na.rm = na.rm, probs = .75) |>
+      digits(round)
 
-    if(!in.brack){
-    text = paste0(median, " (IQR = ",q.25,", ",q.75,")")
-    }else{
-      text = paste0("(median = ",median, ", IQR = [",q.25,", ",q.75,"])")
-    }
-  }
+   glue::glue(pattern)
 
-  return(text)
 }
 
 #' round p
