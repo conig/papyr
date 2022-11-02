@@ -45,4 +45,4 @@ Suggests:
     lexRankr,
     trackdown
 Remotes: crsh/papaja
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1

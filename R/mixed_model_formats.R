@@ -27,6 +27,7 @@ mm_fe = function(model, ...){
                   b = Estimate,
                   SE = Std..Error,
                   p = Pr...t..,
+                  z = z.value,
                   lower = X2.5..,
                   upper = X97.5..)
   return(fixed_table)
@@ -125,6 +126,7 @@ mm_re = function(model, simple_names = T, sigma = F){
 #' @param transf function to transform estimates
 #' @param transf_name string, used to rename 95\% CI column
 #' @param fixed_names a vector of predictor names
+#' @param estimate_name string to describe estimate
 #' @param round a scalar, defaults to 2
 #' @param round_p a scalar. The number of digits to round p to.
 #' @param simple_names a bool. If True, simple names are given
@@ -141,17 +143,18 @@ mm_table = function(model,
                     round = 2,
                     round_p = 3,
                     fixed_names = NULL,
+                    estimate_name = "Estimate",
                     #random_names = NULL,
                     simple_names = F,
                     collapse = " - ",
                     brackets = c("(", ")"),
                     ...) {
-
-
   # define fixed effects -------------------------------------------
+
   fixed_table = mm_fe(model, ...)
 
-  if(!is.null(transf)){ # if transformation requested, transform confidence interval
+  if (!is.null(transf)) {
+    # if transformation requested, transform confidence interval
     fixed_table$lower = transf(fixed_table$lower)
     fixed_table$upper = transf(fixed_table$upper)
 
@@ -161,48 +164,77 @@ mm_table = function(model,
     fixed_table$`Predictors` = fixed_names
   }
 
- #define random effects ------------------------------------------------
+  #define random effects ------------------------------------------------
 
   random_effects = mm_re(model, simple_names = simple_names) %>%
-    dplyr::select(Predictors = Effect, "Estimate" = est) %>%
-    purrr::modify_if(is.numeric,function(x) as.character(digits(x,round)))
+    dplyr::select(Predictors = Effect, "Estimate" = est)
+  random_effects$Estimate[!grepl("%", random_effects$Estimate)] <-
+    digits(as.numeric(random_effects$Estimate[!grepl("%", random_effects$Estimate)], 2))
 
   #round fixed table ------------------------
-  rounded_fixed = fixed_table %>%
+  rounded_fixed <- fixed_table %>%
     dplyr::mutate(lower = digits(lower, round),
-           upper = digits(upper, round))
+                  upper = digits(upper, round))
 
   #perform roundings and formating
 
-  if(is.null(transf)){
+  if (is.null(transf)) {
     rounded_fixed = rounded_fixed %>%
       dplyr::mutate(`95% CI` = glue::glue("[{lower}, {upper}]") %>% as.character())
-  }else{
+  } else{
     rounded_fixed = rounded_fixed %>%
-      dplyr::mutate(temp_estimate = digits(transf(b)),round) %>%
+      dplyr::mutate(temp_estimate = digits(transf(b)), round) %>%
       dplyr::mutate(`95% CI` = glue::glue("{temp_estimate} [{lower}, {upper}]") %>% as.character())
   }
 
   rounded_fixed = rounded_fixed %>%
-    dplyr::mutate(b = digits(b, round),
-           SE = digits(`SE`, round),
-           p = round_p(p, round_p))
+    dplyr::mutate(
+      b = digits(b, round),
+      SE = digits(`SE`, round),
+      z = digits(z, round),
+      p = round_p(p, round_p)
+    )
 
 
   final_fixed = rounded_fixed %>%
-    dplyr::select("Predictors", `Estimate` = b, `$SE$` = SE, `95% CI`, `$p$` = p)
+    dplyr::select(
+      "Predictors",
+      `95% CI`,
+      `Estimate` = b,
+      `$SE$` = SE,
+      `$z$` = z,
+      `$p$` = p
+    )
 
-  if(!is.null(transf_name)){
+  if (!is.null(transf_name)) {
     names(final_fixed)[names(final_fixed) == "95% CI"] = transf_name
   }
 
   #merged table ---------------------------------------
-  table_out = final_fixed %>%
-    dplyr::bind_rows(tibble::tibble(Predictors = "**Random Effects**"),
-              random_effects)
+  table_out = final_fixed
+
+  random_effects_heading <- data.frame(matrix(nrow = 1, ncol = ncol(final_fixed)))
+  random_effects_heading[] <- ""
+  random_effects_heading[1,1] <- "**Random Effects**"
+
+  random_effects_structure <-
+    data.frame(matrix(ncol = ncol(final_fixed),
+           nrow = nrow(random_effects)))
+  random_effects_structure[] <- ""
+  random_effects_structure[,1:2] <- random_effects
+
+  table_out <- data.table::rbindlist(
+    list(
+      final_fixed,
+      random_effects_heading,
+      random_effects_structure
+    ),
+    use.names = FALSE,
+    fill = FALSE
+  )
 
   table_out[is.na(table_out)] = " "
-
+  names(table_out)[names(table_out) == "Estimate"] <- estimate_name
 
   return(table_out)
 }

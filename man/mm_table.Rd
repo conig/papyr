@@ -11,6 +11,7 @@ mm_table(
   round = 2,
   round_p = 3,
   fixed_names = NULL,
+  estimate_name = "Estimate",
   simple_names = F,
   collapse = " - ",
   brackets = c("(", ")"),
@@ -29,6 +30,8 @@ mm_table(
 \item{round_p}{a scalar. The number of digits to round p to.}
 
 \item{fixed_names}{a vector of predictor names}
+
+\item{estimate_name}{string to describe estimate}
 
 \item{simple_names}{a bool. If True, simple names are given}
 

@@ -11,7 +11,13 @@ initiate_targets <- function(path){
 library(future)
 plan("multisession")
 
-scripts <- list.files("R", full.names = TRUE, pattern = ".r$", ignore.case = TRUE)
+tar_option_set(packages = c("data.table"))
+
+scripts <- list.files("R",
+            full.names = TRUE,
+            pattern = ".r$",
+            ignore.case = TRUE,
+            recursive = TRUE)
 for(s in scripts) source(s)
 
 list(

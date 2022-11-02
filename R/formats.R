@@ -104,6 +104,23 @@ m_iqr <- function(x, round = 2, na.rm =T, pattern = "{median} (IQR = {IQR})"){
 
 }
 
+#' m_sd
+#'
+#' Print mean and sd
+#' @param x vector
+#' @param na.rm logical, should missing values be removed?
+#' @param digits number of digits to round to
+#' @param pattern glue pattern mean -> m, std deviation -> sd
+#' @export
+
+m_sd <- function(x ,na.rm = TRUE, digits = 2 , pattern = "{m} (SD = {sd})"){
+
+  m <- digits(mean(x, na.rm = na.rm), n = digits)
+  sd <- digits(sd(x, na.rm = na.rm) , n = digits)
+  glue::glue(pattern)
+
+}
+
 #' round p
 #'
 #' Rounds p value to specified digits and uses less symbol if result it zero.
@@ -114,64 +131,67 @@ m_iqr <- function(x, round = 2, na.rm =T, pattern = "{median} (IQR = {IQR})"){
 #' @param apa_threshold output will indicate p value is less than this value regardless of rounding
 #' @param simplify if greater or equal to this numeric, two decimal places will be used
 #' @export round_p
-round_p =  function(p, n = 3, stars = c(), leading.zero = T, apa_threshold = 0.001, simplify = .1){
-  rounded = digits(p,n)
-  lapply(seq_along(rounded), function(x){
+round_p <-
+  function(p,
+           n = 3,
+           stars = c(),
+           leading.zero = T,
+           apa_threshold = 0.001,
+           simplify = .1) {
+    rounded = digits(p, n)
+    sapply(seq_along(rounded), function(x) {
+      if (!is.na(rounded[x])) {
+        original = p[x]
+        r_original = rounded[x]
+        r = rounded[x]
 
-    if(!is.na(rounded[x])){
-    #message(x)
-    original = p[x]
-    r_original = rounded[x]
-    r = rounded[x]
+        if (as.numeric(r) == 0) {
+          r = strsplit(r, split = "")[[1]]
+          r[length(r)] = 1
+          r = paste(r, collapse = "")
+        }
 
-    if(as.numeric(r) == 0){
-      r = strsplit(r,split="")[[1]]
-      r[length(r)] = 1
-      r = paste(r,collapse = "")
-    }
+        #  add stars --------------
+        stars_to_add = c()
+        if (!is.null(stars)) {
+          stars_to_add = lapply(stars, function(s) {
+            if (as.numeric(original) < s) {
+              return("*")
+            } else{
+              return(NA)
+            }
+          }) %>% unlist %>%
+            stats::na.omit() %>%
+            paste(collapse = "")
 
-    #  add stars --------------
-    stars_to_add = c()
-    if(!is.null(stars)){
-     stars_to_add = lapply(stars,function(s){
-       if(as.numeric(original) < s){
-         return("*")
-       }else{
-         return(NA)
-       }
-      }) %>% unlist %>%
-       stats::na.omit() %>%
-       paste(collapse = "")
+        }
 
-    }
+        if (r_original < as.numeric(r)) {
+          r = paste0("< ", r)
+        }
 
-    if(!leading.zero){
-      r = sub("^(-)?0[.]",
-              "\\1.", r)
-    }
+        if (original < apa_threshold) {
+          r = paste0("< ", apa_threshold)
+        }
 
-    if(r_original < as.numeric(r)){
-      r = paste0("< ",r)
-    }
+        if (original >= simplify) {
+          r = digits(original, 2)
+        }
 
-    if(original < apa_threshold){
-      r = paste0("< ", apa_threshold)
-    }
+        if (!leading.zero) {
+          r <- gsub("0\\.", ".", r)
+        }
 
-    if(original >= simplify){
-      r = digits(original, 2)
-    }
+        r = paste0(r, stars_to_add)
 
-    r = paste0(r,stars_to_add)
+        r
 
-    return(r)
+      } else{
+        NA
+      }
+    })
 
-    }else{
-      NA
-    }
-  }) %>% unlist
-
-}
+  }
 
 #' print_t
 #'
