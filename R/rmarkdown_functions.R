@@ -66,7 +66,6 @@ to_docx <- function(table,
   if (all(table == "clipboard")) {
     table <- paste0("\n", paste(clipr::read_clip(), collapse = "\n"))
   }
-
   if (tools::file_ext(path) != "docx") {
     # if path isn't to .docx, it is now.
     path <- paste0(path, ".docx")
@@ -100,7 +99,7 @@ to_docx <- function(table,
     }
   }
 
-  rmarkdownpath <- system.file("rmd", "docx_table.Rmd", package = "papyr")
+  rmarkdownpath <- system.file("rmd", "docx_table.rmd", package = "papyr")
 
   rmarkdown::render(
     rmarkdownpath,
